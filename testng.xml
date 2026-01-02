@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Tealium E-commerce Test Suite" preserve-order="true">
+    <test name="Product Hover Effect Test">
+        <classes>
+            <class name="tests.ProductHoverEffectTest"/>
+        </classes>
+    </test>
+    <test name="Sale Products Style Test">
+        <classes>
+            <class name="tests.SaleProductsStyleTest"/>
+        </classes>
+    </test>
+    <test name="Men Products Filter Test">
+        <classes>
+            <class name="tests.MenProductsFilterTest"/>
+        </classes>
+    </test>
+    <test name="Sorting and Wishlist Test">
+        <classes>
+            <class name="tests.SortingAndWishlistTest"/>
+        </classes>
+    </test>
+</suite>
+
