@@ -66,22 +66,34 @@ public class MenProductsFilterTest {
         String currentUrl = menPage.getCurrentUrl();
         System.out.println("Current URL: " + currentUrl);
 
-        Assert.assertTrue(currentUrl.contains("color=") || !productsAfterColorFilter.isEmpty(),
-                "Black color filter should be applied - URL should contain color parameter or products should be filtered");
+        // Verify black color filter was applied (URL should contain color parameter)
+        Assert.assertTrue(currentUrl.contains("color="),
+                "Black color filter should be applied - URL should contain color parameter");
 
         System.out.println("✓ Black color filter applied successfully");
-        System.out.println("  Products after filter: " + productsAfterColorFilter.size());
+        System.out.println("  Products after color filter: " + productsAfterColorFilter.size());
 
-
+        // Apply price filter
         menPage.selectFirstPriceOption();
 
         List<WebElement> productsAfterPriceFilter = menPage.getDisplayedProducts();
 
-        System.out.println("\n--- After Price Filter ---");
+        System.out.println("\n--- After Price Filter ($0.00 - $99.99) ---");
         System.out.println("Products displayed: " + productsAfterPriceFilter.size());
 
-        Assert.assertTrue(!productsAfterPriceFilter.isEmpty() && productsAfterPriceFilter.size() <= productsAfterColorFilter.size(),
-                "After selecting price filter, products should be filtered (between 1 and " + productsAfterColorFilter.size() + " products)");
+        String currentUrlAfterPrice = menPage.getCurrentUrl();
+        System.out.println("Current URL: " + currentUrlAfterPrice);
+
+        // Verify price filter was applied (should have products and URL should contain price parameter)
+        Assert.assertTrue(!productsAfterPriceFilter.isEmpty(),
+                "After selecting price filter, at least one product should be displayed");
+
+        Assert.assertTrue(currentUrlAfterPrice.contains("price="),
+                "Price filter should be applied - URL should contain price parameter");
+
+        // Expected 3 products based on the requirement
+        Assert.assertEquals(productsAfterPriceFilter.size(), 3,
+                "After selecting price filter ($0.00 - $99.99), exactly 3 products should be displayed");
 
         System.out.println("\n--- Verifying Product Prices ---");
         for (int i = 0; i < productsAfterPriceFilter.size(); i++) {
@@ -90,14 +102,15 @@ public class MenProductsFilterTest {
 
             System.out.println("Product " + (i + 1) + " price: $" + productPrice);
 
-            Assert.assertTrue(productPrice > 0,
-                    "Product " + (i + 1) + " should have a valid price");
+            // Verify price is within the $0.00 - $99.99 range
+            Assert.assertTrue(productPrice >= 0 && productPrice <= 99.99,
+                    "Product " + (i + 1) + " price ($" + productPrice + ") should be between $0.00 and $99.99");
         }
 
         System.out.println("\n✓ All filters working correctly!");
-        System.out.println("  - Black color filter applied (URL contains color parameter)");
-        System.out.println("  - Price filter applied and showing " + productsAfterPriceFilter.size() + " product(s)");
-        System.out.println("  - All products have valid prices");
+        System.out.println("  - Black color filter applied (URL: " + currentUrl + ")");
+        System.out.println("  - Price filter applied showing " + productsAfterPriceFilter.size() + " product(s)");
+        System.out.println("  - All product prices are within $0.00 - $99.99 range");
     }
 
     @AfterMethod
